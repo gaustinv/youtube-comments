@@ -45,4 +45,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get all of the comments made by the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Get all of the comment likes made by the user.
+     */
+    public function commentLikes() {
+        return $this->hasMany(CommentLike::class);
+    }
 }

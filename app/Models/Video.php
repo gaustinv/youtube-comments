@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Video extends Model
 {
-    /**
-     * Get all of the comments for the video.
-     */
-    public function comments() {
+    use HasFactory;
+
+    protected $fillable = ['title', 'description'];
+
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 }
+

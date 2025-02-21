@@ -4,21 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Sanctum\HasApiTokens;
 
 class CommentLike extends Model
 {
-    use HasFactory;
+  
+    use HasApiTokens, HasFactory;
 
-    /**
-     * The comment that the like belongs to.
-     */
+    protected $fillable = ['comment_id', 'user_id', 'type'];
+
     public function comment() {
         return $this->belongsTo(Comment::class);
     }
 
-    /**
-     * The user that the like belongs to.
-     */
     public function user() {
         return $this->belongsTo(User::class);
     }

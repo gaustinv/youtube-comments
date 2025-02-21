@@ -3,62 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Requests\CommentRequest;
+use App\Services\CommentService;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+    protected $commentService;
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function __construct(CommentService $commentService) {
+        $this->commentService = $commentService;
     }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $videoId
+     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(CommentRequest $request, $videoId) {
+        $comment = $this->commentService->storeComment($videoId, $request->validated());
+        return response()->json($comment, 201);
     }
 
     /**
-     * Display the specified resource.
+     * Get the top comments for a given video.
+     *
+     * @param int $videoId The ID of the video to get the top comments for.
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+    public function topComments($videoId) {
+        $comments = $this->commentService->getTopComments($videoId);
+        return response()->json($comments, 201);
     }
 }

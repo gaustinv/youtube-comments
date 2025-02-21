@@ -3,62 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\CommentService;
 
 class CommentLikeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    protected $commentService;
+    
+    public function __construct(CommentService $commentService) {
+        $this->commentService = $commentService;
     }
-
     /**
-     * Show the form for creating a new resource.
+     * Like a comment by the authenticated user.
+     *
+     * @param int $commentId The ID of the comment to be liked.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function create()
-    {
-        //
+    public function like($commentId) {
+        $like = $this->commentService->likeComment($commentId);
+        return response()->json(['message' => 'Comment liked successfully', 'data' => $like]);
     }
-
+    
     /**
-     * Store a newly created resource in storage.
+     * Dislike a comment by the authenticated user.
+     *
+     * @param int $commentId The ID of the comment to be disliked.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+    public function dislike($commentId) {
+        $dislike = $this->commentService->dislikeComment($commentId);
+        return response()->json(['message' => 'Comment disliked successfully', 'data' => $dislike]);
     }
 }

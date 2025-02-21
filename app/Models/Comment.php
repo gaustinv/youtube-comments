@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Sanctum\HasApiTokens;
 
 class Comment extends Model
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory;
+    protected $fillable = ['video_id', 'user_id', 'parent_id', 'comment_text'];
 
     /**
      * Get all of the comment's replies.
@@ -33,7 +35,14 @@ class Comment extends Model
     /**
      * Get all of the likes for the comment.
      */
-    public function likes() {
-        return $this->hasMany(CommentLike::class);
+    public function likes()
+    {
+        return $this->hasMany(CommentLike::class, 'comment_id');
     }
+
+    public function allReplies() {
+        return $this->hasMany(Comment::class, 'parent_id')->with('allReplies'); // Recursive counting
+    }
+    
+    
 }
